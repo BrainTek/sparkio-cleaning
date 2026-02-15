@@ -52,7 +52,16 @@ export default function Devis() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5 }}
             className="bg-card p-8 md:p-12 rounded-lg border border-border shadow-sm space-y-8"
+            name="devis"
+            method="POST"
+            data-netlify="true"
+            data-netlify-honeypot="bot-field"
           >
+            {/* Champ caché obligatoire pour Netlify */}
+            <input type="hidden" name="form-name" value="contact" />
+
+            {/* Honeypot anti-spam */}
+            <input type="hidden" name="bot-field" />Ò
             {/* Type d'établissement */}
             <div className="grid sm:grid-cols-2 gap-6">
               <div className="space-y-2">

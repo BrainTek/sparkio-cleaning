@@ -10,10 +10,10 @@ import SectionHeading from "@/components/SectionHeading";
 import { toast } from "sonner";
 
 const contactInfo = [
-  { icon: Phone, label: "Téléphone", value: "01 00 00 00 00", href: "tel:+33100000000" },
+  { icon: Phone, label: "Téléphone", value: "06 17 50 04 24", href: "tel:+33617500424" },
   { icon: Mail, label: "Email", value: "contact@sparkio.fr", href: "mailto:contact@sparkio.fr" },
   { icon: MapPin, label: "Zone d'intervention", value: "Paris & Île-de-France" },
-  { icon: Clock, label: "Disponibilité", value: "Lun-Ven, 7h-19h" },
+  { icon: Clock, label: "Disponibilité", value: "7 j/ 7, 7h-20h" },
 ];
 
 export default function Contact() {
@@ -67,35 +67,79 @@ export default function Contact() {
 
             {/* Form */}
             <motion.form
+              name="contact"
+              method="POST"
+              data-netlify="true"
+              data-netlify-honeypot="bot-field"
               onSubmit={handleSubmit}
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5 }}
               className="lg:col-span-3 bg-card p-8 rounded-lg border border-border shadow-sm space-y-6"
             >
+              {/* Champ caché obligatoire pour Netlify */}
+              <input type="hidden" name="form-name" value="contact" />
+
+              {/* Honeypot anti-spam */}
+              <input type="hidden" name="bot-field" />
+
               <div className="grid sm:grid-cols-2 gap-6">
                 <div className="space-y-2">
                   <Label>Nom *</Label>
-                  <Input placeholder="Votre nom" value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} required />
+                  <Input
+                    name="name"
+                    placeholder="Votre nom"
+                    value={form.name}
+                    onChange={(e) => setForm({ ...form, name: e.target.value })}
+                    required
+                  />
                 </div>
+
                 <div className="space-y-2">
                   <Label>Email *</Label>
-                  <Input type="email" placeholder="votre@email.com" value={form.email} onChange={(e) => setForm({ ...form, email: e.target.value })} required />
+                  <Input
+                    name="email"
+                    type="email"
+                    placeholder="votre@email.com"
+                    value={form.email}
+                    onChange={(e) => setForm({ ...form, email: e.target.value })}
+                    required
+                  />
                 </div>
               </div>
+
               <div className="space-y-2">
                 <Label>Téléphone</Label>
-                <Input type="tel" placeholder="01 00 00 00 00" value={form.phone} onChange={(e) => setForm({ ...form, phone: e.target.value })} />
+                <Input
+                  name="phone"
+                  type="tel"
+                  placeholder="01 00 00 00 00"
+                  value={form.phone}
+                  onChange={(e) => setForm({ ...form, phone: e.target.value })}
+                />
               </div>
+
               <div className="space-y-2">
                 <Label>Message *</Label>
-                <Textarea placeholder="Décrivez votre besoin..." value={form.message} onChange={(e) => setForm({ ...form, message: e.target.value })} rows={5} required />
+                <Textarea
+                  name="message"
+                  placeholder="Décrivez votre besoin..."
+                  value={form.message}
+                  onChange={(e) => setForm({ ...form, message: e.target.value })}
+                  rows={5}
+                  required
+                />
               </div>
-              <Button type="submit" className="w-full bg-accent text-accent-foreground hover:bg-gold-dark font-semibold">
+
+              <Button
+                type="submit"
+                className="w-full bg-accent text-accent-foreground hover:bg-gold-dark font-semibold"
+              >
                 <Send className="mr-2 h-4 w-4" />
                 Envoyer le message
               </Button>
             </motion.form>
+
           </div>
         </div>
       </section>

@@ -43,7 +43,7 @@ export default function Navbar() {
         <div className="hidden lg:flex items-center gap-3">
           <a href="tel:+33100000000" className="flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors">
             <Phone className="h-4 w-4" />
-            01 00 00 00 00
+            06 17 50 04 24
           </a>
           <Link to="/devis">
             <Button className="bg-accent text-accent-foreground hover:bg-gold-dark font-semibold">
