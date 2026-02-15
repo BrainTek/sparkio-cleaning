@@ -20,7 +20,6 @@ export default function Contact() {
   const [form, setForm] = useState({ name: "", email: "", phone: "", message: "" });
 
   const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
     toast.success("Votre message a bien été envoyé. Nous vous répondrons rapidement.");
   };
 

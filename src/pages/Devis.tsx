@@ -25,7 +25,6 @@ export default function Devis() {
   });
 
   const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
     toast.success("Votre demande de devis a bien été envoyée. Nous vous recontacterons sous 24h.");
   };
 
@@ -58,10 +57,10 @@ export default function Devis() {
             data-netlify-honeypot="bot-field"
           >
             {/* Champ caché obligatoire pour Netlify */}
-            <input type="hidden" name="form-name" value="contact" />
+            <input type="hidden" name="form-name" value="devis" />
             {/* Honeypot anti-spam */}
             <input type="hidden" name="bot-field" />
-            
+
             {/* Type d'établissement */}
             <div className="grid sm:grid-cols-2 gap-6">
               <div className="space-y-2">
