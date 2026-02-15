@@ -59,9 +59,9 @@ export default function Devis() {
           >
             {/* Champ caché obligatoire pour Netlify */}
             <input type="hidden" name="form-name" value="contact" />
-
             {/* Honeypot anti-spam */}
-            <input type="hidden" name="bot-field" />Ò
+            <input type="hidden" name="bot-field" />
+            
             {/* Type d'établissement */}
             <div className="grid sm:grid-cols-2 gap-6">
               <div className="space-y-2">
