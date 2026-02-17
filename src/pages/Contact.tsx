@@ -116,7 +116,7 @@ export default function Contact() {
               <div className="space-y-2">
                 <Label>Téléphone</Label>
                 <Input
-                  name="tel"
+                  name="phone"
                   type="tel"
                   placeholder="01 00 00 00 00"
                   value={form.phone}
