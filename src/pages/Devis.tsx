@@ -24,7 +24,16 @@ export default function Devis() {
     location: "",
   });
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault()
+
+    const formData = new FormData(e.currentTarget as HTMLFormElement);
+
+    await fetch("/", {
+      method: "POST",
+      body: formData,
+    });
+
     toast.success("Votre demande de devis a bien été envoyée. Nous vous recontacterons sous 24h.");
   };
 
@@ -65,7 +74,7 @@ export default function Devis() {
             <div className="grid sm:grid-cols-2 gap-6">
               <div className="space-y-2">
                 <Label>Type d'établissement *</Label>
-                <Select onValueChange={(v) => update("type", v)} required>
+                <Select name="type" onValueChange={(v) => update("type", v)} required>
                   <SelectTrigger>
                     <SelectValue placeholder="Sélectionnez" />
                   </SelectTrigger>
@@ -82,7 +91,7 @@ export default function Devis() {
               </div>
               <div className="space-y-2">
                 <Label>Fréquence souhaitée *</Label>
-                <Select onValueChange={(v) => update("frequency", v)} required>
+                <Select name="frequency" onValueChange={(v) => update("frequency", v)} required>
                   <SelectTrigger>
                     <SelectValue placeholder="Sélectionnez" />
                   </SelectTrigger>
@@ -103,7 +112,9 @@ export default function Devis() {
               <div className="space-y-2">
                 <Label>Nombre de locaux / chambres</Label>
                 <Input
+                  name="units"
                   placeholder="Ex: 15 bureaux, 3 salles"
+
                   value={formData.units}
                   onChange={(e) => update("units", e.target.value)}
                 />
@@ -122,6 +133,7 @@ export default function Devis() {
             <div className="space-y-2">
               <Label>Localisation *</Label>
               <Input
+                name="location"
                 placeholder="Ville, code postal"
                 value={formData.location}
                 onChange={(e) => update("location", e.target.value)}
@@ -133,6 +145,7 @@ export default function Devis() {
             <div className="space-y-2">
               <Label>Contraintes spécifiques</Label>
               <Textarea
+                name="constraints"
                 placeholder="Horaires particuliers, normes d'hygiène, accès restreints, etc."
                 value={formData.constraints}
                 onChange={(e) => update("constraints", e.target.value)}
@@ -146,6 +159,7 @@ export default function Devis() {
                 <div className="space-y-2">
                   <Label>Société *</Label>
                   <Input
+                    name="company"
                     placeholder="Nom de votre entreprise"
                     value={formData.company}
                     onChange={(e) => update("company", e.target.value)}
@@ -155,6 +169,7 @@ export default function Devis() {
                 <div className="space-y-2">
                   <Label>Nom & Prénom *</Label>
                   <Input
+                    name="contact"
                     placeholder="Votre nom complet"
                     value={formData.contact}
                     onChange={(e) => update("contact", e.target.value)}
@@ -164,6 +179,7 @@ export default function Devis() {
                 <div className="space-y-2">
                   <Label>Email professionnel *</Label>
                   <Input
+                    name="email"
                     type="email"
                     placeholder="votre@email.com"
                     value={formData.email}
@@ -174,6 +190,7 @@ export default function Devis() {
                 <div className="space-y-2">
                   <Label>Téléphone *</Label>
                   <Input
+                    name="phone"
                     type="tel"
                     placeholder="01 00 00 00 00"
                     value={formData.phone}

@@ -19,7 +19,13 @@ const contactInfo = [
 export default function Contact() {
   const [form, setForm] = useState({ name: "", email: "", phone: "", message: "" });
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault()
+    const formData = new FormData(e.currentTarget as HTMLFormElement);
+    await fetch("/", {
+      method: "POST",
+      body: formData,
+    });
     toast.success("Votre message a bien été envoyé. Nous vous répondrons rapidement.");
   };
 
