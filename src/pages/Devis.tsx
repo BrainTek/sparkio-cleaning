@@ -1,14 +1,16 @@
 import { useState } from "react";
-import { motion } from "framer-motion";
-import { Send } from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
+import { Send, Calculator } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Label } from "@/components/ui/label";
+import { Card, CardContent } from "@/components/ui/card";
 import Layout from "@/components/Layout";
 import SectionHeading from "@/components/SectionHeading";
 import { toast } from "sonner";
+import { QuoteCalculator } from "@/lib/quoteCalculator";
 
 export default function Devis() {
   const [formData, setFormData] = useState({
@@ -19,25 +21,33 @@ export default function Devis() {
     phone: "",
     units: "",
     surface: "",
-    frequency: "",
+    frequencyPerWeek: 0,
     constraints: "",
     location: "",
   });
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault()
+  const [estimate, setEstimate] = useState<number | null>(null);
 
-    const formData = new FormData(e.currentTarget as HTMLFormElement);
+  const canSimulate = formData.type !== "" && formData.frequencyPerWeek > 0 && Number(formData.surface) > 0;
 
-    await fetch("/", {
-      method: "POST",
-      body: formData,
+  const handleSimulate = () => {
+    const result = QuoteCalculator.calculateMonthlyEstimate({
+      surface: Number(formData.surface),
+      frequencyPerWeek: formData.frequencyPerWeek,
+      prestationType: formData.type,
     });
+    setEstimate(result);
+  };
 
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    const fd = new FormData(e.currentTarget as HTMLFormElement);
+    await fetch("/", { method: "POST", body: fd });
     toast.success("Votre demande de devis a bien été envoyée. Nous vous recontacterons sous 24h.");
   };
 
-  const update = (field: string, value: string) => setFormData((prev) => ({ ...prev, [field]: value }));
+  const update = (field: string, value: string | number) =>
+    setFormData((prev) => ({ ...prev, [field]: value }));
 
   return (
     <Layout>
@@ -65,12 +75,10 @@ export default function Devis() {
             data-netlify="true"
             data-netlify-honeypot="bot-field"
           >
-            {/* Champ caché obligatoire pour Netlify */}
             <input type="hidden" name="form-name" value="devis" />
-            {/* Honeypot anti-spam */}
             <input type="hidden" name="bot-field" />
 
-            {/* Type d'établissement */}
+            {/* Type & Fréquence */}
             <div className="grid sm:grid-cols-2 gap-6">
               <div className="space-y-2">
                 <Label>Type d'établissement *</Label>
@@ -90,18 +98,21 @@ export default function Devis() {
                 </Select>
               </div>
               <div className="space-y-2">
-                <Label>Fréquence souhaitée *</Label>
-                <Select name="frequency" onValueChange={(v) => update("frequency", v)} required>
+                <Label>Fréquence par semaine *</Label>
+                <Select
+                  name="frequencyPerWeek"
+                  onValueChange={(v) => update("frequencyPerWeek", Number(v))}
+                  required
+                >
                   <SelectTrigger>
                     <SelectValue placeholder="Sélectionnez" />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="quotidien">Quotidien</SelectItem>
-                    <SelectItem value="hebdomadaire">Hebdomadaire</SelectItem>
-                    <SelectItem value="bi-hebdomadaire">Bi-hebdomadaire</SelectItem>
-                    <SelectItem value="mensuel">Mensuel</SelectItem>
-                    <SelectItem value="ponctuel">Ponctuel</SelectItem>
-                    <SelectItem value="rotation">Entre chaque rotation (Airbnb)</SelectItem>
+                    {[1, 2, 3, 4, 5, 6, 7].map((n) => (
+                      <SelectItem key={n} value={String(n)}>
+                        {n} fois par semaine
+                      </SelectItem>
+                    ))}
                   </SelectContent>
                 </Select>
               </div>
@@ -114,17 +125,20 @@ export default function Devis() {
                 <Input
                   name="units"
                   placeholder="Ex: 15 bureaux, 3 salles"
-
                   value={formData.units}
                   onChange={(e) => update("units", e.target.value)}
                 />
               </div>
               <div className="space-y-2">
-                <Label>Surface approximative (m²)</Label>
+                <Label>Surface approximative (m²) *</Label>
                 <Input
-                  placeholder="Ex: 500 m²"
+                  name="surface"
+                  type="number"
+                  min={1}
+                  placeholder="Ex: 500"
                   value={formData.surface}
                   onChange={(e) => update("surface", e.target.value)}
+                  required
                 />
               </div>
             </div>
@@ -153,6 +167,45 @@ export default function Devis() {
               />
             </div>
 
+            {/* Simulation */}
+            <div className="space-y-4">
+              <Button
+                type="button"
+                variant="outline"
+                size="lg"
+                className="w-full font-semibold text-base border-primary text-primary hover:bg-primary/5"
+                disabled={!canSimulate}
+                onClick={handleSimulate}
+              >
+                <Calculator className="mr-2 h-5 w-5" />
+                Simuler mon devis
+              </Button>
+
+              <AnimatePresence>
+                {estimate !== null && (
+                  <motion.div
+                    initial={{ opacity: 0, height: 0 }}
+                    animate={{ opacity: 1, height: "auto" }}
+                    exit={{ opacity: 0, height: 0 }}
+                    transition={{ duration: 0.3 }}
+                  >
+                    <Card className="border-accent bg-accent/5">
+                      <CardContent className="py-6 text-center">
+                        <p className="text-sm text-muted-foreground mb-1">Estimation mensuelle</p>
+                        <p className="text-3xl font-serif font-bold text-primary">
+                          {QuoteCalculator.formatCurrency(estimate)}
+                        </p>
+                        <p className="text-xs text-muted-foreground mt-2">
+                          * Estimation indicative, le tarif définitif sera précisé dans votre devis.
+                        </p>
+                      </CardContent>
+                    </Card>
+                  </motion.div>
+                )}
+              </AnimatePresence>
+            </div>
+
+            {/* Coordonnées */}
             <div className="border-t border-border pt-8">
               <h3 className="font-serif text-xl font-semibold mb-6">Vos coordonnées</h3>
               <div className="grid sm:grid-cols-2 gap-6">
