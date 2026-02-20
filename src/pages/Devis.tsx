@@ -10,11 +10,10 @@ import { Card, CardContent } from "@/components/ui/card";
 import Layout from "@/components/Layout";
 import SectionHeading from "@/components/SectionHeading";
 import { toast } from "sonner";
-import { QuoteCalculator } from "@/lib/quoteCalculator";
-
+import { PricingEngine, type Result as PricingResult } from "@/lib/PricingEngine";
 export default function Devis() {
   const [formData, setFormData] = useState({
-    type: "",
+    type: "" as "bureaux" | "cabinet-medical" | "cabinet-juridique" | "cabinet-autre" | "hotel" | "airbnb" | "autre" | "",
     company: "",
     contact: "",
     email: "",
@@ -26,15 +25,15 @@ export default function Devis() {
     location: "",
   });
 
-  const [estimate, setEstimate] = useState<number | null>(null);
+  const [estimate, setEstimate] = useState<PricingResult | null>(null);
 
   const canSimulate = formData.type !== "" && formData.frequencyPerWeek > 0 && Number(formData.surface) > 0;
 
   const handleSimulate = () => {
-    const result = QuoteCalculator.calculateMonthlyEstimate({
+    const result = PricingEngine.calculate({
       surface: Number(formData.surface),
       frequencyPerWeek: formData.frequencyPerWeek,
-      prestationType: formData.type,
+      segment: formData.type,
     });
     setEstimate(result);
   };
@@ -98,7 +97,7 @@ export default function Devis() {
                 </Select>
               </div>
               <div className="space-y-2">
-                <Label>Fréquence par semaine *</Label>
+                <Label>Fréquence *</Label>
                 <Select
                   name="frequencyPerWeek"
                   onValueChange={(v) => update("frequencyPerWeek", Number(v))}
@@ -108,11 +107,17 @@ export default function Devis() {
                     <SelectValue placeholder="Sélectionnez" />
                   </SelectTrigger>
                   <SelectContent>
-                    {[1, 2, 3, 4, 5, 6, 7].map((n) => (
+                    <SelectItem key={1} value="1">Hebdomadaire</SelectItem>
+                    {[2, 3, 4, 5, 6].map((n) => (
                       <SelectItem key={n} value={String(n)}>
                         {n} fois par semaine
                       </SelectItem>
                     ))}
+                    <SelectItem key={7} value="7">Quotidien</SelectItem>
+                    <SelectItem key={0.5} value="0.5">Bi-hebdomadaire</SelectItem>
+                    <SelectItem key={0.25} value="0.25">Mensuel</SelectItem>
+                    <SelectItem key={0} value="0">Ponctuel</SelectItem>
+                    <SelectItem key="airbnb" value="airbnb">Entre chaque rotation (Airbnb)</SelectItem>
                   </SelectContent>
                 </Select>
               </div>
@@ -189,16 +194,19 @@ export default function Devis() {
                     exit={{ opacity: 0, height: 0 }}
                     transition={{ duration: 0.3 }}
                   >
-                    <Card className="border-accent bg-accent/5">
-                      <CardContent className="py-6 text-center">
-                        <p className="text-sm text-muted-foreground mb-1">Estimation mensuelle</p>
-                        <p className="text-3xl font-serif font-bold text-primary">
-                          {QuoteCalculator.formatCurrency(estimate)}
+                    <Card className="mt-6 p-6 space-y-2">
+                      <p>Prix par passage : {estimate.basePerVisit.toFixed(2)} €</p>
+                      <p>Prix mensuel HT : {estimate.monthly.toFixed(2)} €</p>
+
+                      {estimate.discountRate > 0 && (
+                        <p className="text-green-600">
+                          Remise appliquée : {(estimate.discountRate * 100).toFixed(0)} %
                         </p>
-                        <p className="text-xs text-muted-foreground mt-2">
-                          * Estimation indicative, le tarif définitif sera précisé dans votre devis.
-                        </p>
-                      </CardContent>
+                      )}
+
+                      <p className="font-bold text-xl">
+                        Total mensuel TTC : {estimate.totalWithVAT.toFixed(2)} €
+                      </p>
                     </Card>
                   </motion.div>
                 )}
