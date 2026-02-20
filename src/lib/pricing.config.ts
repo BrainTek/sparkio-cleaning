@@ -77,7 +77,7 @@ export const pricingConfig = {
                 operator: ">",
                 value: 200
             },
-            value: 0.07,
+            value: 0.1,
         },
         {
             name: "Enterprise Boost",
