@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
-import { ArrowRight } from "lucide-react";
+import { ArrowRight, Download } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import Layout from "@/components/Layout";
 import SectionHeading from "@/components/SectionHeading";
@@ -100,12 +100,21 @@ export default function Services() {
                     </li>
                   ))}
                 </ul>
-                <Link to="/devis">
-                  <Button className="bg-accent text-accent-foreground hover:bg-gold-dark font-semibold">
-                    Demander un devis
-                    <ArrowRight className="ml-2 h-4 w-4" />
-                  </Button>
-                </Link>
+                {s.id === "auto" ? (
+                  <a href="/brochure-sparkio-auto.pdf" download>
+                    <Button className="bg-accent text-accent-foreground hover:bg-gold-dark font-semibold">
+                      <Download className="mr-2 h-4 w-4" />
+                      Télécharger la brochure des prix
+                    </Button>
+                  </a>
+                ) : (
+                  <Link to="/devis">
+                    <Button className="bg-accent text-accent-foreground hover:bg-gold-dark font-semibold">
+                      Demander un devis
+                      <ArrowRight className="ml-2 h-4 w-4" />
+                    </Button>
+                  </Link>
+                )}
               </div>
             </motion.div>
           ))}
