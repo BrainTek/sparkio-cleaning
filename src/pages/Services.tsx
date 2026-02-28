@@ -9,6 +9,7 @@ import officeImg from "@/assets/services-office.jpg";
 import hotelImg from "@/assets/services-hotel.jpg";
 import cabinetImg from "@/assets/services-cabinet.jpg";
 import airbnbImg from "@/assets/services-airbnb.jpg";
+import autoImg from "@/assets/services-auto.jpg";
 
 const services = [
   {
@@ -42,6 +43,14 @@ const services = [
     desc: "Airbnb, meublés touristiques, résidences de vacances : nettoyage complet entre chaque voyageur, gestion du linge, réapprovisionnement. Un service clé en main pour maximiser vos avis positifs.",
     features: ["Nettoyage complet entre voyageurs", "Gestion du linge de maison", "Réapprovisionnement consommables", "Checklist qualité photographique"],
     img: airbnbImg,
+  },
+  {
+    id: "auto",
+    title: "Nettoyage Auto Mobile",
+    subtitle: "Votre voiture brille, sans bouger de chez vous",
+    desc: "Sparkio se déplace directement chez vous ou au bureau pour redonner tout son éclat à votre véhicule. Citadine, berline, SUV ou monospace : nous adaptons nos prestations à chaque type de véhicule avec des produits professionnels et un soin méticuleux.",
+    features: ["Lavage extérieur complet & séchage", "Nettoyage intérieur (aspiration, plastiques, vitres)", "Détailing et protection carrosserie", "Formules adaptées : citadine, berline, SUV, monospace"],
+    img: autoImg,
   },
 ];
 
