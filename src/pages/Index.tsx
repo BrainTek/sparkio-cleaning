@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
-import { Building2, Stethoscope, Hotel, Home, ArrowRight, CheckCircle2, Shield, Clock, Star } from "lucide-react";
+import { Building2, Stethoscope, Hotel, Home, ArrowRight, CheckCircle2, Shield, Clock, Star, Car, Download, MapPin, Sparkles } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import Layout from "@/components/Layout";
 import SectionHeading from "@/components/SectionHeading";
@@ -158,6 +158,93 @@ export default function Index() {
                 <p className="text-sm text-muted-foreground leading-relaxed">{s.desc}</p>
               </motion.div>
             ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Car Cleaning Mobile */}
+      <section className="py-20 md:py-28 bg-background">
+        <div className="container">
+          <div className="grid lg:grid-cols-2 gap-12 items-center">
+            <motion.div
+              initial={{ opacity: 0, x: -30 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.6 }}
+            >
+              <span className="inline-block text-accent text-xs font-semibold uppercase tracking-widest mb-3">
+                Nouveau Service
+              </span>
+              <h2 className="font-serif text-3xl md:text-4xl font-bold text-foreground mb-6">
+                Votre voiture brille, sans bouger de chez vous
+              </h2>
+              <p className="text-muted-foreground text-lg leading-relaxed mb-6">
+                Fini les allers-retours au lavage ! Sparkio vient directement chez vous, au bureau ou à domicile, 
+                pour redonner tout son éclat à votre véhicule. Un nettoyage soigné, à votre porte, quand ça vous arrange. 
+                Simple, rapide, et sans stress. 🚗✨
+              </p>
+              <div className="grid grid-cols-2 gap-4 mb-8">
+                {[
+                  { icon: Car, label: "Citadine, berline, SUV, monospace" },
+                  { icon: MapPin, label: "On se déplace chez vous" },
+                  { icon: Clock, label: "Créneau à votre convenance" },
+                  { icon: Sparkles, label: "Résultat impeccable garanti" },
+                ].map((item) => (
+                  <div key={item.label} className="flex items-start gap-3">
+                    <div className="w-9 h-9 rounded-lg bg-accent/10 flex items-center justify-center flex-shrink-0 mt-0.5">
+                      <item.icon className="h-4 w-4 text-accent" />
+                    </div>
+                    <span className="text-sm text-foreground leading-snug">{item.label}</span>
+                  </div>
+                ))}
+              </div>
+              <a href="/brochure-sparkio-auto.pdf" download>
+                <Button size="lg" className="bg-accent text-accent-foreground hover:bg-gold-dark font-semibold text-base px-8">
+                  <Download className="mr-2 h-5 w-5" />
+                  Téléchargez notre brochure tarifs
+                </Button>
+              </a>
+            </motion.div>
+
+            <motion.div
+              initial={{ opacity: 0, x: 30 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.6, delay: 0.2 }}
+              className="relative"
+            >
+              <div className="bg-gradient-to-br from-accent/5 to-accent/15 rounded-2xl p-10 border border-accent/20">
+                <div className="text-center space-y-6">
+                  <Car className="h-16 w-16 text-accent mx-auto" />
+                  <h3 className="font-serif text-2xl font-bold text-foreground">Nos formules auto</h3>
+                  <div className="space-y-3 text-left max-w-xs mx-auto">
+                    {[
+                      { type: "Citadine", desc: "Nettoyage intérieur & extérieur" },
+                      { type: "Berline", desc: "Lavage complet + finitions" },
+                      { type: "SUV", desc: "Traitement grands gabarits" },
+                      { type: "Monospace", desc: "Nettoyage familial approfondi" },
+                    ].map((v) => (
+                      <div key={v.type} className="flex items-center gap-3 p-3 bg-card rounded-lg border border-border">
+                        <CheckCircle2 className="h-5 w-5 text-accent flex-shrink-0" />
+                        <div>
+                          <span className="font-semibold text-sm text-foreground">{v.type}</span>
+                          <p className="text-xs text-muted-foreground">{v.desc}</p>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                  <p className="text-sm text-muted-foreground italic">
+                    Tous les tarifs détaillés dans notre brochure 👇
+                  </p>
+                  <a href="/brochure-sparkio-auto.pdf" download>
+                    <Button variant="outline" className="border-accent text-accent hover:bg-accent/10">
+                      <Download className="mr-2 h-4 w-4" />
+                      Voir les tarifs
+                    </Button>
+                  </a>
+                </div>
+              </div>
+            </motion.div>
           </div>
         </div>
       </section>
