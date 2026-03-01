@@ -16,7 +16,7 @@ const sectors = [
 const stats = [
   { value: "500+", label: "Interventions mensuelles" },
   { value: "98%", label: "Taux de satisfaction" },
-  { value: "12", label: "Années d'expérience" },
+  { value: "5", label: "Années d'expérience" },
   { value: "50+", label: "Clients récurrents" },
 ];
 

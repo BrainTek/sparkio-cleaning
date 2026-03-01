@@ -2,6 +2,10 @@ import { QuoteFormData } from "./Types";
 
 export const pricingConfig = {
     segments: {
+        "bureaux": {
+            vat: 0.2,
+            basePricePerM2: 2,
+        },
         "cabinet-medical": {
             vat: 0.2,
             basePricePerM2: 2,
